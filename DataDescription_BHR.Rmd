@@ -1,0 +1,57 @@
+---
+title: 'CAP 5302, Project: Data Description'
+author: "Ashley Brockway, Jamie Hobbs, Olivia Roberts"
+date: "4/22/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# 1. Source and inspiration for data set 
+
+  - **Data Source:** data.world
+  - **Dataset:** Student Alcohol Consumption - Portuguese class students
+  - **Description:** Secondary school student alcohol consumption data with social, gender and study information.
+  -  **Link:** [https://data.world/data-society/student-alcohol-consumption](https://data.world/data-society/student-alcohol-consumption)  
+  
+# 2. Data size  
+
+  - **Variables:** 33 attributes
+  - **Observations:** 650 students in the Portuguese class  
+  
+# 3. Variable Descriptions  
+
+  - **School:** student's school (GP- Gabriel Pereira, MS- Mousinho da Silveira)
+  - **Gender:** student's gender (F- female, M- male)
+  - **Age:** student's age (15 to 22)
+  - **Address:** student's home address (U- urban, R- rural)
+  - **Family.Size:** family size(LE3- less than 3, GT3- greater than 3) 
+  - **Parental.Status:** parent's cohabitation status (T- living together, A- apart)
+  - **Mothers.Edu:** mother's education (0- none, 1- 4th grade, 2- 5th to 9th **grade, 3- 10th to 12th, 4- higher education) 
+  - **Fathers.Edu:** father's education (0- none, 1- 4th grade, 2- 5th to 9th grade, 3- 10th to 12th, 4- higher education)
+  - **Mothers.Job:** mother's job (teacher, health care related, civil services, at home, other) 
+  - **Fathers.job:** father's job (teacher, health care related, civil services, at home, other)
+  - **Reason.for.school.choice:** reason for school choice (close to home, school reputation, course preference, other)
+  - **Students.guardian:** student's guardian (mother, father or other)
+  - **Travel.time:** home to school travel time (1- <15 mins, 2- 15 to 30 mins, 3- 30 mins to 1 hr, 4- >1 hr)
+  - **Study.time:** weekly study time (1- <2 hrs, 2- 2 to 5 hrs, 3- 5 to 10 hrs, 4- >10 hrs)
+  - **Num.past.class.failures:** number of past class failures (n if n<=3, else 4)
+  - **School.support:** extra educational support (yes or no)
+  - **Family.support:** family educational support (yes or no)
+  - **Extra.port.classes:** extra paid courses within course subject (yes or no)
+  - **Activities:** participate in extracurricular activities (yes or no)
+  - **Nusery.School:** attended nursery school (yes or no)
+  - **Wants.higher.ed:** desire for higher education (yes or no)
+  - **Home.internet:** internet access at home (yes or no)
+  - **Romantic.Relationship:** in a romantic relationship (yes or no)
+  - **Family.rel.qual:** quality of family relationships (1- very bad to 5- very good)
+  - **Free.time.categorical:** free time from school ( 1- very low to 5- very high)
+  - **Time.out.categorical:** time spent going out with friends ( 1- very low to 5- very high)
+  - **Workday.alc:** workday alcohol consumption ( 1- very low to 5- very high)
+  - **Weekend.alc:**weekend alcohol consumption ( 1- very low to 5- very high)
+  - **Health.categorical:** health status (1- very bad to 5- very good)
+  - **Count.absences:** total number of school absences (0 to 93)
+  - **First.term.grade:** first period grade (0 to 20)
+  - **Second.term.grade:** second period grade (0 to 20)
+  - **Final.Grade:** final grade (0 to 20)
