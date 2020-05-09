@@ -1,0 +1,107 @@
+---
+title: "CAP5302, Logisitic Regression"
+author: "Jamie Hobbs"
+date: "5/8/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(corrplot)
+source("http://www.sthda.com/upload/rquery_cormat.r")
+library(tidyverse)
+library(caret)
+library(car)
+library(MASS)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+portugese.class.data <- read.csv('C:/Users/count/OneDrive/Documents/Escuela/StatsII/StatsProj/Stat-Inference-2-Final-Project-master/data-testing/data/student-por.csv')
+
+str(portugese.class.data)
+```
+
+```{r}
+#Factor G3 into low (<12) or high(>=12)
+portugese.class.data2$G3 <- factor(ifelse(portugese.class.data2$G3 <12, 'low', 'high'))
+str(portugese.class.data2)
+
+
+#Find median of each term grades to determine best split factor for high and low
+medians <- apply(portugese.class.data[,c(31:33)],2,median)
+
+#Factor G1,G2 & G3 into low (<12) or high(>=12)
+portugese.class.data3 <- portugese.class.data
+portugese.class.data3$G1 <- factor(ifelse(por2$G1 <12, 'low', 'high'))
+portugese.class.data3$G2 <- factor(ifelse(por2$G2 <12, 'low', 'high'))
+portugese.class.data3$G3 <- factor(ifelse(por2$G3 <12, 'low', 'high'))
+
+#G1 high and low proportions
+G1 <- portugese.class.data3 %>% 
+  group_by(G1) %>%
+  summarise(n = length(G1)/649) 
+
+#G2 high and low proportions
+G2 <- portugese.class.data3 %>% 
+  group_by(G2) %>%
+  summarise(n = length(G2)/649) 
+
+#G3 high and low proportions
+G3 <- portugese.class.data3 %>% 
+  group_by(G3) %>%
+  summarise(n = length(G3)/649) 
+
+#Combine three groups of high and low proportions
+counts <- cbind(G1$n,G2$n,G3$n)
+colnames(counts) <- c('G1','G2','G3')
+rownames(counts) <- c('High','Low')
+counts
+
+```
+
+
+```{r}
+#correlation matrix prior to factor conversion and  
+# portugese.class.data2 <-  portugese.class.data
+# portugese.class.data2[,c(7,8,13:15,24:29)] <- lapply(portugese.class.data2[,c(7,8,13:15,24:29)], factor)
+# str(portugese.class.data2)
+#porNum <- portugese.class.data[,c (3,7,8,13,14,15,24:33)]
+#rquery.cormat(porNum, type="upper")
+```
+
+
+```{r}
+
+#Term 3 regressed on sex, mother's job, rural vs urban, family suppport, wants higher education, study time, parents living status, healthy status, number of absences, term 1 grades, term 2 grades
+initFit <- glm(G3 ~ sex+Mjob+address+famsup+higher+studytime+Pstatus+health+absences+G1+G2, family=binomial, data=portugese.class.data2)
+coef(initFit)
+summary(initFit)
+
+#Average the 3 term grades  
+new.data <- portugese.class.data %>% mutate(Avg.Grade = ((G1+G2+G3)/3))
+new.data$Avg.Grade <- as.integer(new.data$Avg.Grade)
+new.data$Avg.Grade <- factor(ifelse(new.data$Avg.Grade <12, 'low', 'high'))
+
+#Fit based on new average grade variable regressed on same 9 variables from initFit
+avgFit <- glm(Avg.Grade ~ sex+Mjob+address+famsup+higher+studytime+Pstatus+health+absences, family=binomial, data=new.data)
+coef(avgFit)
+summary(avgFit)
+
+#stepwise variable selection on initial fit for term 3 grade
+step.model <- initFit %>% stepAIC(trace = FALSE)
+coef(step.model)
+
+#stepwise variable selection on new fit for average grade
+step.model2 <- avgFit %>% stepAIC(trace = FALSE)
+coef(step.model2)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
