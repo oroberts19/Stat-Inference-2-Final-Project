@@ -1,0 +1,192 @@
+---
+title: "EDA & Categorical Data Anaylsis"
+author: "Ashley Brockway"
+date: "5/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+port <- read.csv('./data/student-por.csv')
+
+portugese.class.data <- port %>% 
+  select(# School = school, 
+         Gender = sex, 
+         Age = age, 
+         # Address = address, 
+         Family.Size = famsize, 
+         # Parental.Status = Pstatus, 
+         Mothers.Edu = Medu, 
+         Fathers.Edu = Fedu, 
+         # Mothers.Job = Mjob, 
+         # Fathers.job = Fjob, 
+         # Reason.for.school.choice = reason,
+         # Students.guardian = guardian,
+         Travel.time = traveltime, 
+         Study.time = studytime,
+         Num.past.class.failures = failures,
+         School.support = schoolsup, 
+         Family.support = famsup,
+         Extra.port.classes = paid,
+         # Activities = activities, 
+         Nursery.School = nursery,
+         Wants.higher.ed = higher,
+         Home.internet = internet, 
+         Romantic.Relationship = romantic,
+         Family.rel.qual = famrel, 
+         Free.time.categorical = freetime,
+         Time.out.categorical = goout,
+         Workday.alc = Dalc,
+         Weekend.alc = Walc,
+         Health.categorical = health, 
+         Count.absences = absences, 
+         # First.term.grade = G1, 
+         # Second.term.grade = G2, 
+         Final.Grade = G3)
+```
+
+```{r}
+attach(portugese.class.data)
+str(portugese.class.data)
+```
+
+```{r}
+summary(Age)
+summary(Gender)
+summary(Family.Size)
+summary(Nursery.School)
+summary(Free.time.categorical)
+summary(Time.out.categorical)
+summary(Mothers.Edu)
+summary(Fathers.Edu)
+summary(School.support)
+summary(Family.support)
+summary(Extra.port.classes)
+```
+
+
+```{r}
+getBarPlot <- function(dat, variable, varname){
+  p <- ggplot(data = dat, 
+                aes(x = variable)) + 
+        geom_bar() + 
+        xlab(varname) + 
+        ylab("Count") + 
+        ggtitle(paste("Barplot of ", varname)) + 
+        theme_classic() 
+  return(p)
+}
+```
+
+```{r}
+getBarPlot(portugese.class.data, Final.Grade, "Final Grade")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Travel.time, "Travel Time")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Age, "Age")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Count.absences, "Count of Absences")
+```
+
+
+```{r}
+getBarPlot(portugese.class.data, Workday.alc, "Workday Alcohol Consumption")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Weekend.alc, "Weekend Alcohol Consumption")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Num.past.class.failures, "Number of Past Class Failures")
+```
+
+```{r}
+getBarPlot(portugese.class.data, Health.categorical, "Student's Health")
+```
+
+```{r}
+gender.alc <- portugese.class.data %>%
+  select(Workday.alc, Gender) %>%
+  table()
+
+
+chisq.test(gender.alc)
+```
+
+```{r}
+getTable <- function(tab){
+  x <- colSums(tab)
+  y <- append(rowSums(tab), sum(x))
+
+  fill <- rbind(tab, x)
+  final <- cbind(fill, y)
+  return(final)
+}
+```
+
+```{r}
+l <- getTable(gender.alc)
+```
+
+```{r}
+prop.table(gender.alc, margin = 1)
+```
+
+```{r}
+goals.part <- portugese.class.data %>%
+  select(Weekend.alc, Gender) %>%
+  table()
+getTable(goals.part)
+prop.table(goals.part, margin = 1)
+
+chisq.test(goals.part)
+```
+
+```{r}
+sup.time.out <- portugese.class.data %>%
+  select(Family.support, Study.time) %>%
+  table()
+getTable(sup.time.out)
+prop.table(sup.time.out, margin = 1)
+
+chisq.test(sup.time.out)
+
+```
+
+```{r}
+study.alc <- portugese.class.data %>%
+  select(Weekend.alc, Study.time) %>%
+  table()
+getTable(study.alc)
+prop.table(study.alc, margin = 1)
+
+chisq.test(study.alc)
+
+```
+
+```{r}
+study.alc2 <- portugese.class.data %>%
+  select(Workday.alc, Study.time) %>%
+  table()
+getTable(study.alc2)
+prop.table(study.alc2, margin = 1)
+
+chisq.test(study.alc2)
+
+
+```
+
