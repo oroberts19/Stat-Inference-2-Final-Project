@@ -102,6 +102,9 @@ coef(step.model)
 step.model2 <- avgFit %>% stepAIC(trace = FALSE)
 coef(step.model2)
 
+final <- glm(Avg.Grade ~ sex+Mjob+address+higher+studytime+health+absences, family=binomial, data=new.data)
+coef(final)
+summary(final)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
